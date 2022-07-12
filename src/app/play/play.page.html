@@ -1,0 +1,106 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Lifepoint Calculator</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+    <ion-modal [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>{{activePlayer.name}} &nbsp;|&nbsp; {{activePlayer.lp}}</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="confirm()" [strong]="true" name="cancel">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <ion-content class="ion-padding">
+
+    <div class="calc" gdColumns="4" gdRows="5" gdAuto="column" style="height: 100%;" gdGap="10px">
+
+        <div class="example-full-width" appearance="outline" gdColumn="1/5" gdRow="1/2">
+            <div gdColumns="6" class="t1" >
+                <div gdColumn="1/2">{{activePlayer.lp}}</div>
+                <div gdColumn="2/3">{{operator}}</div>
+                <div gdColumn="3/4">{{value}}</div>
+                <div gdColumn="4/5">=</div>
+                <div gdColumn="5/6"> {{updatedValue}} </div>
+            </div>
+        </div>
+        <button mat-raised-button color="accent" gdColumn="1/2" gdRow="2/3" (click)="resetValue()"> DEL </button>
+
+
+        <button mat-raised-button color="primary" gdColumn="1/2" gdRow="3/4" (click)="toValue(1)"> 1</button>
+        <button mat-raised-button color="primary" gdColumn="2/3" gdRow="3/4" (click)="toValue(2)"> 2</button>
+        <button mat-raised-button color="primary" gdColumn="3/4" gdRow="3/4" (click)="toValue(3)"> 3</button>
+
+        <button mat-raised-button color="accent" gdColumn="4/5" gdRow="3/4" (click)="asOperator('+')"> + </button>
+
+        <button mat-raised-button color="primary" gdColumn="1/2" gdRow="4/5" (click)="toValue(4)"> 4</button>
+        <button mat-raised-button color="primary" gdColumn="2/3" gdRow="4/5" (click)="toValue(5)"> 5</button>
+        <button mat-raised-button color="primary" gdColumn="3/4" gdRow="4/5" (click)="toValue(6)"> 6</button>
+
+        <button mat-raised-button color="accent" gdColumn="4/5" gdRow="4/5" (click)="asOperator('-')"> - </button>
+
+        <button mat-raised-button color="primary" gdColumn="1/2" gdRow="5/6" (click)="toValue(7)"> 7</button>
+        <button mat-raised-button color="primary" gdColumn="2/3" gdRow="5/6" (click)="toValue(8)"> 8</button>
+        <button mat-raised-button color="primary" gdColumn="3/4" gdRow="5/6" (click)="toValue(9)"> 9</button>
+
+        <button mat-raised-button color="accent" gdColumn="4/5" gdRow="5/6" (click)="asOperator('/')"> / </button>
+
+        <button mat-raised-button color="primary" gdColumn="1/2" gdRow="6/7" (click)="toValue(0)"> 0</button>
+        <button mat-raised-button color="primary" gdColumn="2/3" gdRow="6/7" (click)="toValue(0,true)"> 00 </button>
+        <button mat-raised-button color="accent" gdColumn="3/5" gdRow="6/7" (click)="updateValue()"> = </button>
+
+
+    </div>
+
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
+
+    <div *ngIf="players.length >0" style="height:100%">
+        <ion-grid style="height: 100%;" fxLayout="column" fxLayoutAlign="space-between">
+
+            <ion-row style=" height: 100%;" *ngFor="let player of players" class="grid">
+                <ion-col [class]="'img ' " [style.background-image]="'url('+(player.background | async) +')'" style="border-radius: 10px; border-width: 2px; border-style: solid;" (click)="setOpen(true)">
+                <div fxLayout="column" style="width:100%; height:100%">
+                    <div class="header" fxFlex="20">{{player.name}} </div>
+                    <div fxLayout="column" fxFlex="75" fxLayoutAlign="center center" class="lp">
+                        <div [class]="player.class" (click)="calcLP(player)">
+                            {{player.lp}}
+
+                        </div>
+                    </div>
+                </div>
+
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
+    <ion-fab vertical="bottom" horizontal="end" >
+        <ion-fab-button color="light" >
+            <ion-icon name="settings"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="start">
+
+              <ion-fab-button id="count" (click)="presentActionSheet()">
+                <ion-icon name="person-add" ></ion-icon>
+              </ion-fab-button>
+
+            <ion-fab-button id="reset-game" (click)="resetGame()">
+              <ion-icon name="refresh"></ion-icon>
+            </ion-fab-button>
+          </ion-fab-list>
+    </ion-fab>
+
+</ion-content>

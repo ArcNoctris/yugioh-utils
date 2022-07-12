@@ -1,0 +1,154 @@
+ion-menu-button {
+    color: var(--ion-color-primary);
+  }
+  
+  #container {
+    text-align: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  #container strong {
+    font-size: 20px;
+    line-height: 26px;
+  }
+  
+  #container p {
+    font-size: 16px;
+    line-height: 22px;
+    color: #8c8c8c;
+    margin: 0;
+  }
+  
+  #container a {
+    text-decoration: none;
+  }
+  
+.mat-form-field-wrapper {
+    padding: 100px !important;
+    //height: 60px !important;
+    //font-size: small !important;}
+}
+.staticContent{
+    height:100%;
+    width:100%;
+    position:absolute;
+    top:0;
+    left:0;
+    //overflow:hidden;
+}
+.menu{
+
+    
+    //position:absolute;
+    //bottom: 0;
+    //right: 0;
+    margin: 10px;
+    padding: 10px;
+    background-color: #8d929dcc;
+    border: 2px solid #1b253b;
+    border-radius: 10px;
+
+    align-items: center;
+}
+    
+
+.normal{
+
+}
+.r90{
+    transform: rotate(90deg);
+}
+.r180{
+    transform: rotate(180deg);
+}
+.lp{
+    font-size: 5em;
+    color: #cccccc;
+    text-shadow: 10px 10px 10px #000000;
+    font-family: monospace
+}
+.img{
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover; /* Resize the background image to cover the entire container */
+}
+.header{
+    font-size: xx-large;
+    color: #cccccc;
+    margin: 10px;
+    padding: 10px;
+    background-color: #00000066;
+}
+.example-overlay{
+    width: 100%;
+    height: 100%;
+    position:absolute;
+    bottom: 0;
+    right: 0;
+}
+.calculator{
+    background-color: #000000 !important;
+    color: blueviolet;
+    //position:absolute;
+    bottom: 0;
+    right: 0;
+    width: 50%;
+    height: 50%;
+}
+.example-full-width {
+    width: 100%;
+    height: 100%;
+    min-height: 40px;
+
+    //padding: 10px;
+    background-color: #8d929dcc;
+    border: 2px solid #1b253b;
+    border-radius: 10px;
+  }
+
+  .cdk-overlay-container {
+    background-color: #000000 !important;
+    width: 100%;
+    height: 100%;
+    position:absolute;
+    bottom: 50% !important;
+    right: 50%;
+    z-index: 1000;
+  }
+  .calc{
+    margin: 10px;
+    padding: 10px;
+    background-color: #1b253baa;
+    border: 2px solid #1b253b;
+    border-radius: 10px;
+  }
+  .mid{
+    position:absolute;
+    z-index: 999;
+    bottom: 30vh;
+    left: 40vw;
+  }
+.t1{
+    text-align: center;
+    display: flex;
+    align-items: center;
+    //justify-content: center;
+}
+.menuButton{
+
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        z-index: 900;
+
+}
+.grid{
+    margin: 5px;
+  }
+ion-popover {
+    --offset-y: -180px !important;
+}

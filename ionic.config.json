@@ -1,0 +1,7 @@
+{
+  "name": "yugioh-utils",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
