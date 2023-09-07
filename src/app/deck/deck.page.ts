@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, Output, Renderer2 } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, Output, Renderer2, NgZone, OnDestroy } from '@angular/core';
 
 import { MenuController } from '@ionic/angular';
 import { FirebaseCommunicationService } from '../services/firebase-communication.service';
@@ -16,6 +16,7 @@ import { UploadingFile } from '../models/uploadingFile.model';
 
 import { HttpEventType, HttpErrorResponse, HttpClient, } from '@angular/common/http';
 import { User } from 'firebase/auth';
+import { Subscription } from 'rxjs';
 
 
 
@@ -60,6 +61,7 @@ interface DeckDescription {
   styleUrls: ['./deck.page.scss'],
 })
 export class DeckPage implements OnInit {
+  public userSub:Subscription
   public folder: string;
   public ygoDeck: YgoDeck
   public cardList: string[]
@@ -74,50 +76,35 @@ export class DeckPage implements OnInit {
     public cds: CardDbService,
     public http: HttpClient,
     public auth: AuthService,
-    private as: AuthService) {
+    private as: AuthService,
+    private ngZone:NgZone) {
+    
 
 
-    as.user$.subscribe(user => {
-      this.user = user
-      this.userDecks = undefined
-      this.selectedDeck = undefined
-      // this.fcs.getUserDecks(user.uid).then(q => q.forEach(d => {
-      //   if (this.userDecks == undefined) {
-      //     this.userDecks = [d.data()]
-      //   }
-      //   this.userDecks.push(d.data())
+  }
 
-      // }))
+
+
+
+  ngOnInit(): void {
+    this.userSub = this.as.user$.subscribe(user => {
+
+      this.ngZone.run(() => {
+        this.user = user
+        this.userDecks = undefined
+        this.selectedDeck = undefined
+      })
+      
+      //this.appPages.push({ title: 'My Decks', url: `/deck/${user.uid}`, icon: 'layers' })
+
       this.fcs.getUserDecks(user.uid).then(d => this.userDecks =d)
 
 
     })
   }
-
-
-  // this.cardList = []
-  // fcs.listCardImages().then(
-  //   list => {
-  //     if (list.items.length != 0) {
-  //       for (let item of list.items) {
-  //         this.cardList.push(item.name)
-  //         console.log(item.name)
-  //       }
-  //     }
-  //   })
-  // fcs.listCardDocs().then(t => {
-  //   if (!t.empty) {
-  //     for (let card of t.docs) {
-  //       this.cardList.push(card.id)
-  //     }
-
-  //   }
-  //   console.log(this.cardList)
-  // }
-  // )
-
-
-  ngOnInit(): void {
+  ngOnDestroy(){
+    console.log("unsubbed")
+    this.userSub.unsubscribe()
   }
 
   getFiles() {

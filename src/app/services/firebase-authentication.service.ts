@@ -7,6 +7,9 @@ import {
   SignInWithPhoneNumberOptions,
   SignInWithPhoneNumberResult,
   User,
+  SignInWithEmailAndPasswordOptions,
+  
+  
 } from '@capacitor-firebase/authentication';
 import { environment } from '../../environments/environment';
 import { initializeApp } from '@firebase/app';
@@ -14,6 +17,7 @@ import { Platform } from '@ionic/angular';
 import { Observable, Subject } from 'rxjs';
 import {AuthService} from './auth.service'
 import{FirebaseCommunicationService} from './firebase-communication.service'
+import { signInWithEmailAndPassword, sendEmailVerification} from 'firebase/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -78,16 +82,35 @@ export class FirebaseAuthenticationService {
     await FirebaseAuthentication.signInWithGithub();
   }
 
-  public async signInWithGoogle(): Promise<SignInResult> {
+  public async signInWithGoogle(): Promise<void> {
     let sir = await FirebaseAuthentication.signInWithGoogle();
     sir.credential.accessToken
     await this.as.googleSignIn(sir.credential.idToken)
     await this.fcs.createUserEntry()
-    return sir;
+    //return sir;
   }
 
   public async signInWithMicrosoft(): Promise<void> {
     await FirebaseAuthentication.signInWithMicrosoft();
+  }
+  public async signUpWithMail(email, password, username) {
+    let sir = await FirebaseAuthentication.createUserWithEmailAndPassword({email:email,password:password})
+    await this.as.signUpWithMail(email,password,username)
+    //let options:SignInWithEmailAndPasswordOptions = {email:email, password:password}
+    //await FirebaseAuthentication.createUserWithEmailAndPassword(options)
+    //FirebaseAuthentication.sendEmailVerification()
+
+  }
+  public async signInWithMail(email: string, password:string):Promise<void>{
+    console.log("this?"+ email + password)
+    let options:SignInWithEmailAndPasswordOptions = {email:email,password:password}
+    let sir = await FirebaseAuthentication.signInWithEmailAndPassword({email:email,password:password})
+    console.log("this?2")
+    await this.as.signInWithMail(email,password)
+    console.log("this?3")
+    await this.fcs.createUserEntry()
+    
+    //return sir
   }
 
   public async signInWithPlayGames(): Promise<void> {

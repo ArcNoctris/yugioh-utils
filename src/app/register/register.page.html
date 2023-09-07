@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header><ion-card-subtitle>Sign Up</ion-card-subtitle></ion-card-header>
+    <ion-card-content>
+      
+  <form [formGroup]="registerForm" (ngSubmit)="submitRegistration()">
+    <ion-item lines="full">
+      <ion-label position="floating">User Name</ion-label>
+      <ion-input type="text" formControlName="nick" autocomplete="name" required></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="this.registerForm.controls.nick.invalid && this.registerForm.controls.nick.dirty"> Use maximal 12 chars </ion-text>
+    <ion-item lines="full">
+      <ion-label position="floating"  >Email</ion-label>
+      <ion-input type="email"  formControlName="email" autocomplete="email" required></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="this.registerForm.controls.email.invalid && this.registerForm.controls.email.dirty"> Mail Adress is not Valid </ion-text>
+    <ion-item lines="full">
+      <ion-label position="floating">Password</ion-label>
+      <ion-input  type="password" formControlName="password" required autocomplete="new-password"></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="this.registerForm.controls.password.invalid && this.registerForm.controls.password.dirty"> Use at least 8 chars </ion-text>
+    <!-- <ion-item lines="full">
+      <ion-label position="floating">Repeat Password</ion-label>
+      <ion-input type="password" required></ion-input>
+    </ion-item> -->
+
+    <ion-row>
+      <ion-col>
+        <ion-button type="submit" color="danger" expand="block" [disabled]="!registerForm.valid">Sign Up</ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-card-content>
+</ion-card>
+<ion-card>
+  <ion-card-header>
+    <ion-card-subtitle>Sign Up With:</ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-list>
+
+
+      <ion-button expand="block" (click)="signInWithGoogle()">
+        <ion-icon name="logo-google" slot="start"></ion-icon> Google
+      </ion-button>
+    </ion-list>
+  </ion-card-content>
+</ion-card>
+
+</ion-content>

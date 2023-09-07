@@ -47,6 +47,7 @@ export class ProfilePage implements OnInit {
     private as: AuthService
   ) {
     this.a = as.user$
+    console.log(this.a)
   }
 
   public ngOnInit(): void {

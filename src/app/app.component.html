@@ -10,19 +10,21 @@
 
       <ion-content>
 
-        <ion-chip *ngIf="user" [routerLink]="['/profile']">
+        <ion-chip *ngIf="user;else singin" [routerLink]="['/profile']">
           <ion-avatar>
             <ion-img [src]="user.photoURL"></ion-img>
           </ion-avatar>
           <ion-label>{{user.displayName}}</ion-label>
         </ion-chip>
-        <ion-menu-toggle auto-hide="false" *ngIf="!user">
-          <ion-item routerDirection="root" [routerLink]="['/login']" lines="none">
-            <ion-icon slot="start" name="log-in"></ion-icon>
-            <ion-label>log-in</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-        <ion-list></ion-list>
+        <ng-template #singin>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item routerDirection="root" [routerLink]="['/login']" lines="none">
+              <ion-icon slot="start" name="log-in"></ion-icon>
+              <ion-label>Log In / Register</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ng-template>
+
 
 
         <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">

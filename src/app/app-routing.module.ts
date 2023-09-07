@@ -18,13 +18,12 @@ const routes: Routes = [
   },
   {
     path: 'deck',
-    pathMatch: 'full',
     loadChildren: () => import('./deck/deck.module').then( m => m.DeckPageModule)
   },
-  {
-    path: 'deck/:id',
-    loadChildren: () => import('./deck/deck.module').then( m => m.DeckPageModule)
-  },
+  // {
+  //   path: 'deck/:id',
+  //   loadChildren: () => import('./deck/deck.module').then( m => m.DeckPageModule)
+  // },
   {
     path: 'profile',
     loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule),
@@ -33,6 +32,14 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'register',
+    loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
+  },
+  {
+    path: 'forgot-password',
+    loadChildren: () => import('./forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
   },
 ];
 

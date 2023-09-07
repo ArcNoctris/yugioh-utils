@@ -3,21 +3,92 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title></ion-title>
+    <ion-title>LogIn</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-card-content>
 
-    <ion-button expand="block" (click)="signInWithApple()">Apple</ion-button>
-    <ion-button expand="block" (click)="signInWithFacebook()">Facebook</ion-button>
-    <ion-button expand="block" (click)="signInWithGithub()">GitHub</ion-button>
-    <ion-button expand="block" (click)="signInWithGoogle()">Google</ion-button>
-    <ion-button expand="block" (click)="signInWithMicrosoft()">Microsoft</ion-button>
-    <ion-button expand="block" (click)="signInWithPlayGames()">Play Games</ion-button>
-    <ion-button expand="block" (click)="signInWithTwitter()">Twitter</ion-button>
-    <ion-button expand="block" (click)="signInWithYahoo()">Yahoo</ion-button>
-    <ion-button expand="block" (click)="signInWithPhoneNumber()">Phone</ion-button>
-  </ion-card-content>
+  <ion-card>
+     <ion-card-header>
+      <!-- <ion-card-title>Log In</ion-card-title> -->
+      <ion-card-subtitle>E-Mail / Password</ion-card-subtitle>
+
+    </ion-card-header>
+    <ion-card-content>
+      <!-- <ion-list> -->
+
+      <form [formGroup]="loginForm" (ngSubmit)="signInWithMail()">
+        <ion-item lines="full">
+          <ion-label position="floating">Email</ion-label>
+          <ion-input type="text" formControlName="email" autocomplete="email" required></ion-input>
+        </ion-item>
+        <ion-text color="danger" *ngIf="this.loginForm.controls.email.invalid && this.loginForm.controls.email.dirty"> Mail Adress is not Valid </ion-text>
+        <ion-item lines="full">
+          <ion-label position="floating">Password</ion-label>
+          <ion-input type="password" formControlName="password" autocomplete="password" required></ion-input>
+        </ion-item>
+        <ion-row>
+          <ion-col sizeMd="3">
+            <ion-button type="submit" color="secondary" expand="block" [disabled]="!loginForm.valid">Sign In</ion-button>
+
+          </ion-col>
+        </ion-row>
+      </form>
+        <ion-row>
+          <ion-col >
+            <a [routerLink]="['/forgot-password']" class="small-text">Forgot Password?</a>
+          </ion-col>
+        </ion-row>
+        {{loginForm.value | json}}
+
+      <!-- <ion-card-subtitle>Log In With:</ion-card-subtitle>
+      <ion-button expand="block" (click)="signInWithGoogle()">
+        <ion-icon name="logo-google" slot="start"></ion-icon> Google
+      </ion-button> -->
+    <!-- </ion-list> -->
+
+
+      <!-- <ion-card-subtitle>No Accout Yet?</ion-card-subtitle> -->
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Log In With:</ion-card-subtitle>
+
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <!-- <ion-item-divider color="secondary">
+          <ion-label>
+            Secondary Item Divider
+          </ion-label>
+        </ion-item-divider> -->
+
+        <ion-button expand="block" (click)="signInWithGoogle()">
+          <ion-icon name="logo-google" slot="start"></ion-icon> Google
+        </ion-button>
+      </ion-list>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>No Accout Yet?</ion-card-subtitle>
+
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+
+        <ion-button expand="block" [routerLink]="['/register']" color="warning">
+          Register
+        </ion-button>
+      </ion-list>
+
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>
