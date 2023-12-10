@@ -40,7 +40,11 @@ const routes: Routes = [
   {
     path: 'forgot-password',
     loadChildren: () => import('./forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
+  },  {
+    path: 'card-finder',
+    loadChildren: () => import('./card-finder/card-finder.module').then( m => m.CardFinderPageModule)
   },
+
 ];
 
 @NgModule({

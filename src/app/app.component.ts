@@ -13,6 +13,7 @@ export class AppComponent {
   public appPages = [
     { title: 'Play', url: '/play', icon: 'dice' },
     { title: 'Decks', url: '/deck', icon: 'layers' },
+    { title: 'Card Finder', url: '/card-finder', icon: 'scan-circle' },
 
 
 
