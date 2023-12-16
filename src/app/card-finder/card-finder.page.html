@@ -7,4 +7,8 @@
 <ion-content class="ion-padding">
   <ion-button expand="full" (click)="takePicture()">Take Photo</ion-button>
   <img *ngIf="photo" [src]="photo" alt="Captured Photo">
+  <div *ngIf="jso">{{jso | json}}</div>
+  <div *ngIf="card" fxFlex=20 fxFlex.gt-sm=12.5 fxFlex.gt-md=10 style="padding: 1px;">
+    <img [src]="card.card_images[0].image_url" style="width: 100%;">
+  </div>
 </ion-content>

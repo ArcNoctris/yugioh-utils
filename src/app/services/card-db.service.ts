@@ -23,8 +23,8 @@ export class CardDbService {
   }
   public getCardFromNum(number:string,language:string){
     let url:string = 'https://db.ygoprodeck.com/api/v7/cardinfo.php'
-    console.log(`${url}?id=${number}`)
-    let query = `${url}?id=${number}`
+    console.log(`${url}?id=${number}&language=${language}`)
+    let query = `${url}?id=${number}&language=${language}`
     //if (language == "EN" ){
     //  query = `${url}?id=${number}`
     //}
