@@ -63,3 +63,73 @@ ion-content {
     background-color: #c47dff49;
     border-color: #c47dffa9;
   }
+
+  /* image-picker.component.scss */
+.image-picker-container {
+  height: 100%;
+  ion-row {
+    height: 100%;
+  }
+}
+.mid-col {
+  ion-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.image-picker-card {
+  max-width: 300px;
+  width: 80%;
+  border: 2px solid var(--ion-color-primary);
+}
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+
+  height: 300px;
+  width: 300px;
+
+  margin: 0 auto;
+}
+
+b {
+  width: 100%;
+}
+
+.ripple-parent {
+  position: relative;
+  overflow: hidden;
+
+  border: 1px solid #ddd;
+}
+
+.rectangle {
+  width: 300px;
+  height: 150px;
+  border-radius: 8px;
+}
+
+.rounded-rectangle {
+  width: 185px;
+  height: 65px;
+  border-radius: 8px;
+}
+
+.circle {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+}
+
+.ripple-text{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

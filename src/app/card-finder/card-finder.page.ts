@@ -14,9 +14,8 @@ import { OCR} from '../models/ocr.model';
 export class CardFinderPage implements OnInit {
   photo: SafeResourceUrl | undefined | string;
   processing: boolean = false;
-  jso;
-  card: ypdcard;
-  card2: ypdcard;
+  card: ypdcard | undefined;
+  card2: ypdcard | undefined;
   searchResult : OCR;
   constructor(private sanitizer: DomSanitizer, private cardService: CardOcrService, private cardDB: CardDbService) { }
 
@@ -26,7 +25,7 @@ export class CardFinderPage implements OnInit {
 
  /**
    * Takes a picture using the device camera and processes the image.
-   * @returns {Promise<string>} The web path of the captured image.
+   * @returns {Promise<SafeResourceUrl>} The web path of the captured image.
    */
  async takePicture(): Promise<SafeResourceUrl> {
   try {
@@ -60,7 +59,6 @@ export class CardFinderPage implements OnInit {
 }
 private resetData(): void {
   this.photo = undefined;
-  this.jso = undefined;
   this.card = undefined;
   this.card2 = undefined;
   this.searchResult = undefined;
@@ -68,25 +66,24 @@ private resetData(): void {
 
 /**
  * Processes the result of card search and updates the component properties.
- * @param {any} result - The result of the card search.
+ * @param {OCR} OCRResult - The result of the card search.
  */
-private processCardSearchResult(result: any): void {
-  this.jso = result;
+private processCardSearchResult(OCRResult: OCR): void {
 
-  //if ('card_ID' in result && result['card_ID'] !== '') {
-  //  this.cardDB
-  //    .getCardFromID(result['card_ID'])
-  //    .toPromise()
-  //    .then((cardDBResult) => {
-  //      console.log(cardDBResult);
-  //      this.card2 = cardDBResult.data[0];
-  //    })
-  //    .catch((e) => console.log(e));
-  //}
-
-  if ('konami_ID' in result && result['konami_ID'] !== '') {
+  if ('card_ID' in OCRResult && OCRResult['card_ID'] !== '') {
     this.cardDB
-      .getCardFromNum(result['konami_ID'], result['language'])
+      .getCardID(OCRResult['card_ID'])
+      .toPromise()
+      .then((cardDBResult) => {
+        console.log(cardDBResult);
+        this.card = cardDBResult.data[0];
+      })
+      .catch((e) => console.log(e));
+  }
+
+  if ('konami_ID' in OCRResult && OCRResult['konami_ID'] !== '') {
+    this.cardDB
+      .getCardFromNum(OCRResult['konami_ID'], OCRResult['language'])
       .toPromise()
       .then((cardDBResult) => {
         console.log("Data")
