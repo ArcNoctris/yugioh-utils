@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import {CardOcrService} from '../services/card-ocr.service';
-import {CardDbService} from '../services/card-db.service';
+import { CardOcrService } from '../services/card-ocr.service';
+import { CardDbService } from '../services/card-db.service';
 import { ypdset, ypdcard } from '../models/ygoprodeck.model';
+import { OCR} from '../models/ocr.model';
 
 @Component({
   selector: 'app-card-finder',
@@ -11,58 +12,92 @@ import { ypdset, ypdcard } from '../models/ygoprodeck.model';
   styleUrls: ['./card-finder.page.scss'],
 })
 export class CardFinderPage implements OnInit {
-  photo: string | undefined | SafeResourceUrl;
+  photo: SafeResourceUrl | undefined | string;
+  processing: boolean = false;
   jso;
   card: ypdcard;
-  card2: ypdset;
-  constructor(private sanitizer: DomSanitizer,private cardService:CardOcrService, private cardDB:CardDbService) {}
+  card2: ypdcard;
+  searchResult : OCR;
+  constructor(private sanitizer: DomSanitizer, private cardService: CardOcrService, private cardDB: CardDbService) { }
 
   ngOnInit() {
-   
-  }
- 
 
-  async takePicture(): Promise<string>  {
+  }
+
+ /**
+   * Takes a picture using the device camera and processes the image.
+   * @returns {Promise<string>} The web path of the captured image.
+   */
+ async takePicture(): Promise<SafeResourceUrl> {
+  try {
+    this.resetData();
+
     const image = await Camera.getPhoto({
       quality: 90,
-      allowEditing: false,
+      allowEditing: true,
       resultType: CameraResultType.Uri,
-      source: CameraSource.Camera,
+      source: CameraSource.Prompt,
     });
-    var resu = this.cardService.hw().toPromise();
-    console.log(resu.toString())
-    this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
+    this.processing = true;
 
-    fetch(image.webPath!)
-    .then((res) => res.blob())
-    .then((blob) => {
-      const file = new File([blob], 'image.jpg', { type: 'image/jpeg' });
-      this.cardService.searchCard(file).then((re) => {
-        console.log(re)
-        this.jso = re
-        if ('card_ID' in re && re['card_ID'] != ""){
-          this.cardDB.getCardFromID(re['card_ID'],'en').toPromise().then((cardDBResult) => {console.log(cardDBResult)
-            this.card2 = cardDBResult}).catch((e)=>console.log(e))
+    //this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
+    this.photo = image.webPath;
+
+    const blob = await fetch(image.webPath!).then((res) => res.blob());
+    const file = new File([blob], 'image.jpg', { type: 'image/jpeg' });
+
+    this.searchResult = await this.cardService.searchCard(file);
+
+    this.processCardSearchResult(this.searchResult);
+    this.processing = false; 
+    return this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
+  } catch (error) {
+    console.error('Error taking picture:', error);
+    this.processing = false; 
+    // Handle error gracefully (show a toast, etc.)
+    return '';
+  }
+}
+private resetData(): void {
+  this.photo = undefined;
+  this.jso = undefined;
+  this.card = undefined;
+  this.card2 = undefined;
+  this.searchResult = undefined;
+}
+
+/**
+ * Processes the result of card search and updates the component properties.
+ * @param {any} result - The result of the card search.
+ */
+private processCardSearchResult(result: any): void {
+  this.jso = result;
+
+  //if ('card_ID' in result && result['card_ID'] !== '') {
+  //  this.cardDB
+  //    .getCardFromID(result['card_ID'])
+  //    .toPromise()
+  //    .then((cardDBResult) => {
+  //      console.log(cardDBResult);
+  //      this.card2 = cardDBResult.data[0];
+  //    })
+  //    .catch((e) => console.log(e));
+  //}
+
+  if ('konami_ID' in result && result['konami_ID'] !== '') {
+    this.cardDB
+      .getCardFromNum(result['konami_ID'], result['language'])
+      .toPromise()
+      .then((cardDBResult) => {
+        console.log("Data")
+        for (let dat in cardDBResult.data){
+          console.log(dat)
         }
-        if ('konami_ID' in re && re['konami_ID'] != ""){
-          this.cardDB.getCardFromNum(re['konami_ID'],re['language']).toPromise().then((cardDBResult) => {console.log(cardDBResult.data[0])
-            this.card = cardDBResult.data[0]}).catch((e)=>console.log(e))
-        }
+        //console.log(cardDBResult.data[0]);
+        this.card = cardDBResult.data[0];
       })
-      
-    })
-
-    //var res = await this.cardService.searchCard(image.webPath,'en').toPromise();
-    //console.log(res.toString())
-    return image.webPath;
-    // image.webPath will contain a path that can be set as an image src.
-    // You can access the original file using image.path, which can be
-    // passed to the Filesystem API to read the raw data of the image,
-    // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
-    
-    //this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image.dataUrl) as SafeResourceUrl;
-    // Can be set to the src of an image now
-    //imageElement.src = imageUrl;
-  };
+      .catch((e) => console.log(e));
+  }
+}
 
 }

@@ -13,6 +13,14 @@ import { idResult } from '../models/upload.model';
 export class CardDbService {
 
   constructor(private http: HttpClient) { }
+  public getCardID(id:string){
+    let url:string = 'https://db.ygoprodeck.com/api/v7/cardinfo.php'
+    console.log(`${url}?konami_id=${id}`)
+    let objkt = this.http.get<ypdresponse>(`${url}?konami_id=${id}`)
+    console.log('use set info')
+    console.log(objkt)
+    return objkt
+  }
   public getCardFromID(id:string,language:string){
     let url:string = 'https://db.ygoprodeck.com/api/v7/cardsetsinfo.php'
     console.log(`${url}?setcode=${id}`)
@@ -21,10 +29,11 @@ export class CardDbService {
     console.log(objkt)
     return objkt
   }
+
   public getCardFromNum(number:string,language:string){
     let url:string = 'https://db.ygoprodeck.com/api/v7/cardinfo.php'
     console.log(`${url}?id=${number}&language=${language}`)
-    let query = `${url}?id=${number}&language=${language}`
+    let query = `${url}?id=${number}`
     //if (language == "EN" ){
     //  query = `${url}?id=${number}`
     //}

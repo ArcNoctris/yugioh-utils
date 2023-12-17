@@ -32,6 +32,12 @@ ion-content {
     color: #ffb77d80;
     margin: 5px;
   }
+  ion-img {
+    max-width: 100%; // Adjust the percentage as needed
+    width: auto;
+    height: auto;
+  }
+
   
   #container a {
     text-decoration: none;
