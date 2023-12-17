@@ -8,16 +8,15 @@ export class OCR{
         //public id:string = undefined,
         //Identifier
         public language:string | undefined = undefined,
-        public card_ID:string | undefined = undefined,
-        public konami_ID:string | undefined = undefined
+        public setID:string | undefined = undefined,
+        public id:string | undefined = undefined
 
 
     ){
         //Identifier
         this.language = language,
-        this.card_ID= card_ID,
-        //COPY INFORMATIONS
-        this.konami_ID = konami_ID
+        this.setID= setID,
+        this.id = id
 
 
     }

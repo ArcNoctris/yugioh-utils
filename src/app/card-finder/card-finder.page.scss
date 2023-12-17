@@ -133,3 +133,12 @@ b {
   align-items: center;
   justify-content: center;
 }
+ion-avatar {
+  --border-radius: 4px;
+}
+.small-card-img{
+  height: 120px;
+  margin-top: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}

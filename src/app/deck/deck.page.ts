@@ -172,7 +172,7 @@ export class DeckPage implements OnInit {
         else {
           // this.cardList.push(line)
           console.log("was here")
-          let ygodbCard = (await this.cds.getCardFromNum(line, "en").toPromise()).data[0]
+          let ygodbCard = (await this.cds.getCardFromID(line, "en").toPromise()).data[0]
           console.log(ygodbCard)
           // let card: Card = {
           //   archetype: ygodbCard.archetype,
@@ -250,7 +250,7 @@ export class DeckPage implements OnInit {
 card: ypdcard
 searchID(ID: string) {
 
-  this.cds.getCardFromNum(ID, "en").subscribe((e: ypdresponse) => {
+  this.cds.getCardFromID(ID, "en").subscribe((e: ypdresponse) => {
     console.log(e)
     this.card = e.data[0]
 

@@ -21,16 +21,16 @@ export class CardDbService {
     console.log(objkt)
     return objkt
   }
-  public getCardFromID(id:string,language:string){
+  public getSetFromSetID(setID:string){
     let url:string = 'https://db.ygoprodeck.com/api/v7/cardsetsinfo.php'
-    console.log(`${url}?setcode=${id}`)
-    let objkt = this.http.get<ypdset>(`${url}?setcode=${id}`)
+    console.log(`${url}?setcode=${setID}`)
+    let objkt = this.http.get<ypdset>(`${url}?setcode=${setID}`)
     console.log('use set info')
     console.log(objkt)
     return objkt
   }
 
-  public getCardFromNum(number:string,language:string){
+  public getCardFromID(number:string,language:string){
     let url:string = 'https://db.ygoprodeck.com/api/v7/cardinfo.php'
     console.log(`${url}?id=${number}&language=${language}`)
     let query = `${url}?id=${number}`
