@@ -76,7 +76,10 @@ export class CardFinderPage implements OnInit {
   private processCardSearchResult(OCRResult: OCR): void {
 
     if ('setID' in OCRResult && OCRResult.setID !== '') {
+      console.log(OCRResult.setID.replace(OCRResult['language'].toUpperCase(), "EN"))
+      console.log("replca")
       OCRResult.setID = OCRResult.setID.replace(OCRResult['language'].toUpperCase(), "EN")
+      console.log(OCRResult.setID)
       this.cardDB
         .getSetFromSetID(OCRResult.setID)
         .toPromise()
@@ -93,7 +96,7 @@ export class CardFinderPage implements OnInit {
         });
 
     } else if ('id' in OCRResult && OCRResult['id'] !== '') {
-      this.getCardFromID(this.set.id, OCRResult.language);
+      this.getCardFromID(OCRResult.id, OCRResult.language);
     }
   }
 

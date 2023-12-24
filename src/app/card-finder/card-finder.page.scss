@@ -142,3 +142,35 @@ ion-avatar {
   margin-right: 20px;
   margin-bottom: 20px;
 }
+.captured-card {
+  height: 100%;
+  max-height: 100%;
+}
+.content-image{
+  width: 100%;         /* Make sure the image fills its container horizontally */
+  height: 100%;        /* Make sure the image fills its container vertically */
+  object-fit: cover;
+}
+.img-container {
+  display: grid;
+  place-items: center; /* Center the image within the container */
+  max-height: 75vh;    /* Set maximum height to 60% of the viewport height */
+  overflow: hidden;    /* Hide any overflow beyond the maximum height */
+  object-position: center; 
+}
+ion-img {
+  width: 100%;               /* Make sure the image fills its container horizontally */
+  height: 100%;              /* Make sure the image fills its container vertically */
+  object-fit: cover;     
+  object-position: center;     /* Maintain aspect ratio and cover the container */
+  filter: blur(0);           /* Initial blur, you can adjust this as needed */
+}
+
+.blur {
+  filter: blur(5px);         /* Apply blur when the spinner is active */
+}
+
+ion-spinner {
+  position: absolute;
+  z-index: 1;                /* Ensure the spinner is on top of the image */
+}

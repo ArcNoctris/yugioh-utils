@@ -22,74 +22,37 @@
 
 
 
-    <ion-row>
-      <ion-col size-md="6" size-xs="12">
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col size-md="12" size-xs="12">
         <ion-card *ngIf="photo" class="captured-card">
-          <ion-list *ngIf="card">
-            <ion-item>
 
-              <img alt="Card Image" [src]="card.card_images[0].image_url_small" class="small-card-img" />
-
-
-              <ion-label>
-                <h2>{{ card.name }} [{{searchResult.language | uppercase}}]</h2>
-                <p *ngIf="set"> {{set.set_code }} | {{set.set_rarity }} | {{set.set_price }} €</p>
-                <p *ngIf="!set"> Set information not detected. Card has {{card.card_sets.length}} Prints.</p>
-              </ion-label>
-            </ion-item>
-          </ion-list>
-          <ion-img [src]="photo" alt="Captured Photo"></ion-img>
-          <ion-card-header>
-            <ion-card-title>OCR Result</ion-card-title>
-          </ion-card-header>
           <ion-card-content>
-
+            <ion-list *ngIf="card">
+              <ion-item>
+                <ion-thumbnail slot="start">
+                <ion-img alt="Card Image" [src]="card.card_images[0].image_url_small" ></ion-img>
+  
+                </ion-thumbnail>
+                <ion-label>
+                  <h2>{{ card.name }} [{{searchResult.language | uppercase}}]</h2>
+                  <p *ngIf="set"> {{set.set_code }} | {{set.set_rarity }} | {{set.set_price }} €</p>
+                  <p *ngIf="!set"> Set information not detected. Card has {{card.card_sets.length}} Prints.</p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+            <div class="img-container">
+            <ion-img [src]="photo" alt="Captured Photo"  class="content-image" [class.blur]="processing"></ion-img>
+            <ion-spinner color="primary" *ngIf="processing"></ion-spinner>
+          </div>
             {{ searchResult | json }}
 
           </ion-card-content>
 
-          <ion-spinner color="primary" *ngIf="processing"></ion-spinner>
-          <p class="processing-text" *ngIf="processing">Processing...</p>
-
         </ion-card>
       </ion-col>
 
-      <ion-col *ngIf="card" size-md="6" size-xs="12">
-        <ion-card class="card-details-card">
-          <ion-img [src]="card.card_images[0].image_url" alt="Card Image"></ion-img>
-          <ion-card-header>
-            <ion-card-title>{{ card.name }}</ion-card-title>
-            <ion-card-subtitle>Language: {{searchResult.language | uppercase}}</ion-card-subtitle>
-          </ion-card-header>
-          <ion-card-content>
-
-            <!-- Display card details -->
-            <ion-list>
-              <ion-item *ngFor="let price of card.card_prices">
-                <ion-label>cardmarket price : {{ price.cardmarket_price }}</ion-label>
-              </ion-item>
-              <ion-item *ngFor="let price of card.card_prices">
-                <ion-label>tcgplayer price : {{ price.tcgplayer_price}}</ion-label>
-
-              </ion-item>
-
-            </ion-list>
-
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="searchResult">
-      <ion-col size-md="5" size-xs="12">
-        <ion-card class="json-result-card">
-          <ion-card-header>
-            <ion-card-title>OCR Result</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>{{ searchResult | json }}</ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
   </ion-grid>
 
   <ion-fab vertical="bottom" horizontal="end" (click)="takePicture()">
