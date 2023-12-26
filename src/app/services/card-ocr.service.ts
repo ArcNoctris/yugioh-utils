@@ -16,7 +16,7 @@ export class CardOcrService {
 
   constructor(private http: HttpClient) { }
   public searchCard(image:File){
-    let url:string = 'http://192.168.178.20:8000/process_image'
+    let url:string = 'https://arcnoctris-deckdojo.hf.space/process_image'
     const formData: FormData = new FormData();
     formData.append('file', image, image.name);
 
