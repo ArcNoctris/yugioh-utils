@@ -5,7 +5,7 @@ import {AuthGuard} from './services/auth.guard'
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'play',
+    redirectTo: 'loading',
     pathMatch: 'full'
   },
   {
@@ -40,13 +40,18 @@ const routes: Routes = [
   {
     path: 'forgot-password',
     loadChildren: () => import('./forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
-  },  {
+  },
+  {
     path: 'card-finder',
     loadChildren: () => import('./card-finder/card-finder.module').then( m => m.CardFinderPageModule)
   },
   {
     path: 'loading',
     loadChildren: () => import('./loading/loading.module').then( m => m.LoadingPageModule)
+  },
+  {
+    path: 'home',
+    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   },
 
 ];

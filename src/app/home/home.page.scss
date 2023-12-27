@@ -1,0 +1,82 @@
+
+
+  .logo {
+    width: auto; /* Adjust the width as needed */
+    height: 45px; /* Maintain the aspect ratio */
+    margin-top: 4px;
+  }
+  .logo-text {
+    height: 36px; /* Maintain the aspect ratio */
+    margin-top: 4px;
+    margin-left: 10px; /* Adjust the margin as needed for spacing */
+    font-size: 1.5rem; /* Adjust the font size as needed */
+    
+  
+    display: grid;
+    align-items: center;
+   
+        
+  }
+
+  
+  .logo-container {
+    text-align: center;
+    margin-top: 20px;
+    //background-color: #facf47aa;
+  }
+  
+  .app-logo {
+    width: 120px; /* Adjust the size as needed */
+    height: 120px; /* Adjust the size as needed */
+  }
+  
+  ion-button {
+    height: fit-content;
+    
+  }
+  .full{
+    margin: 2px;
+
+  }
+
+
+
+
+  
+
+  .wrapper {
+    display: flex;
+    flex-wrap: wrap;
+  
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+  
+    height: 170px;
+    width: 400px;
+  
+    margin: 0 auto;
+  }
+
+  ion-card{
+    padding: 10px;
+    border-radius: 25px;
+  }
+
+
+  .center-title{
+    text-align: center;
+    //font-size: x-large;
+    //font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
+.center-content{
+
+
+  display: flex;
+  //flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+h1{
+    margin: 1rem;
+}

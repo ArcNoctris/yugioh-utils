@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-grid class="logo-container">
+      <ion-row class="ion-justify-content-center ">
+
+        <ion-col  class="center-content">
+          <h1>Deck</h1>
+          <img src="assets/icon/deckdojo.svg" alt="App Logo" class="app-logo">
+          <h1>Dojo</h1>
+        </ion-col>
+
+
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+
+  <ion-grid>
+    <ion-row class="ion-justify-content-center">
+    
+      <ion-col size-md="3" size-sm="6" size-xs="6">
+        <ion-card (click)="function1()" color="secondary" [routerLink]="['/play']" >
+          <div class="ion-activatable ripple-parent">
+            <img src="assets/utils/find.svg" alt="App Logo" class="full">
+            <ion-ripple-effect></ion-ripple-effect>
+          </div>
+          <h4 class="center-title">Play Game</h4>
+        </ion-card>
+      </ion-col>
+      <ion-col size-md="3" size-sm="6" size-xs="6">
+        <ion-card (click)="function1()" color="secondary" [routerLink]="['/card-finder']" >
+          <div class="ion-activatable ripple-parent">
+            <img src="assets/utils/new.svg" alt="App Logo" class="full">
+            <ion-ripple-effect></ion-ripple-effect>
+          </div>
+          <h4 class="center-title" >Find Card</h4>
+        </ion-card>
+      </ion-col>
+
+    </ion-row>
+    <ion-row class="ion-justify-content-center">
+
+      <ion-col size-md="3" size-sm="6" size-xs="6">
+        <ion-card (click)="function1()" color="secondary" [routerLink]="['/deck']" >
+          <div class="ion-activatable ripple-parent">
+            <img src="assets/utils/deck.svg" alt="App Logo" class="full">
+            <ion-ripple-effect></ion-ripple-effect>
+          </div>
+          <h4 class="center-title">Deck Viewer</h4>
+        </ion-card>
+      </ion-col>
+      <ion-col size-md="3" size-sm="6" size-xs="6">
+        <ion-card (click)="function1()" color="d">
+          <div class="ion-activatable ripple-parent">
+            <img src="assets/utils/play.svg" alt="App Logo" class="full">
+            <ion-ripple-effect></ion-ripple-effect>
+          </div>
+          <h4 class="center-title" >Comming Soon...</h4>
+        </ion-card>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
+
+
+</ion-content>
