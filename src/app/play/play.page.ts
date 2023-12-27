@@ -205,9 +205,9 @@ export class PlayPage implements OnInit {
     }
     resetGame() {
       this.players = []
-      this.players.push({ name: "Plyer1", lp: 8000, cols: "1/7", rows: "1/1", class: "r180", background: this.getRandomBackground("r180") })
+      this.players.push({ name: "Player1", lp: 8000, cols: "1/7", rows: "1/1", class: "r180", background: this.getRandomBackground("r180") })
       this.activePlayer = this.players[0]
-      this.players.push({ name: "Plyer2", lp: 8000, cols: "1/7", rows: "2/2", class: "normal", background: this.getRandomBackground("normal") })
+      this.players.push({ name: "Player2", lp: 8000, cols: "1/7", rows: "2/2", class: "normal", background: this.getRandomBackground("normal") })
       switch (this.playerCount) {
         case '2': {
           this.rowHeight = "2:1"
@@ -221,7 +221,7 @@ export class PlayPage implements OnInit {
           this.players[1].rows = "1/1"
           this.players[0].class = "r90"
           this.players[1].class = "r180"
-          this.players.push({ name: "Plyer3", lp: 8000, cols: "3/7", rows: "2/2", class: "normal", background: this.getRandomBackground("normal") })
+          this.players.push({ name: "Player3", lp: 8000, cols: "3/7", rows: "2/2", class: "normal", background: this.getRandomBackground("normal") })
           break;
         }
         case '3-2': {
@@ -231,7 +231,7 @@ export class PlayPage implements OnInit {
           this.players[0].rows = "1/1"
           this.players[1].rows = "1/1"
           this.players[1].class = "r180"
-          this.players.push({ name: "Plyer3", lp: 8000, cols: "1/4", rows: "2/2", class: "normal", background: this.getRandomBackground("normal") })
+          this.players.push({ name: "Player3", lp: 8000, cols: "1/4", rows: "2/2", class: "normal", background: this.getRandomBackground("normal") })
   
           break;
         }
@@ -242,8 +242,8 @@ export class PlayPage implements OnInit {
           this.players[0].rows = "1/1"
           this.players[1].rows = "1/1"
           this.players[1].class = "r180"
-          this.players.push({ name: "Plyer3", lp: 8000, cols: "1/4", rows: "2/2", class: "normal", background: this.getRandomBackground("normal") })
-          this.players.push({ name: "Plyer3", lp: 8000, cols: "4/7", rows: "2/2", class: "normal", background: this.getRandomBackground("normal") })
+          this.players.push({ name: "Player3", lp: 8000, cols: "1/4", rows: "2/2", class: "normal", background: this.getRandomBackground("normal") })
+          this.players.push({ name: "Player3", lp: 8000, cols: "4/7", rows: "2/2", class: "normal", background: this.getRandomBackground("normal") })
           break;
         }
         case '4-2': {

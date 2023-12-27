@@ -117,3 +117,20 @@ ion-note {
 ion-item.selected {
   --color: var(--ion-color-primary);
 }
+.logo {
+  width: auto; /* Adjust the width as needed */
+  height: 36px; /* Maintain the aspect ratio */
+  margin-top: 4px;
+}
+.logo-text {
+  height: 36px; /* Maintain the aspect ratio */
+  margin-top: 4px;
+  margin-left: 10px; /* Adjust the margin as needed for spacing */
+  font-size: 1.5rem; /* Adjust the font size as needed */
+  
+
+  display: grid;
+  align-items: center;
+ 
+      
+}

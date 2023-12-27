@@ -1,0 +1,19 @@
+ion-content {
+    --background: #ffffff; /* Set the background color as needed */
+  
+    .logo {
+      width: 150px; /* Adjust the width of your logo */
+      height: 150px; /* Adjust the height of your logo */
+      display: block;
+      margin: 0 auto;
+      margin-bottom: 20px;
+    }
+  
+    ion-spinner {
+      margin-bottom: 20px;
+    }
+  
+    ion-label {
+      font-size: 18px; /* Adjust the font size as needed */
+    }
+  }

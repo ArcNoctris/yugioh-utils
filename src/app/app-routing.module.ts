@@ -44,6 +44,10 @@ const routes: Routes = [
     path: 'card-finder',
     loadChildren: () => import('./card-finder/card-finder.module').then( m => m.CardFinderPageModule)
   },
+  {
+    path: 'loading',
+    loadChildren: () => import('./loading/loading.module').then( m => m.LoadingPageModule)
+  },
 
 ];
 
