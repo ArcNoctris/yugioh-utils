@@ -20,7 +20,7 @@ export class CardFinderPage implements OnInit {
   constructor(private sanitizer: DomSanitizer, private cardService: CardOcrService, private cardDB: CardDbService) { }
 
   ngOnInit() {
-
+    this.takePicture()
   }
 
   /**
@@ -35,7 +35,7 @@ export class CardFinderPage implements OnInit {
         quality: 90,
         allowEditing: true,
         resultType: CameraResultType.Uri,
-        source: CameraSource.Prompt,
+        source: CameraSource.Camera,
       });
       this.processing = true;
 

@@ -1,7 +1,9 @@
 ion-menu ion-content {
   --background: var(--ion-item-background, var(--ion-background-color, #fff));
 }
-
+ion-menu{
+  width: auto;
+}
 ion-menu.md ion-content {
   --padding-start: 8px;
   --padding-end: 8px;
@@ -119,18 +121,31 @@ ion-item.selected {
 }
 .logo {
   width: auto; /* Adjust the width as needed */
-  height: 36px; /* Maintain the aspect ratio */
-  margin-top: 4px;
+  height: 44px; /* Maintain the aspect ratio */
+  //margin-top: 4px;
 }
 .logo-text {
-  height: 36px; /* Maintain the aspect ratio */
-  margin-top: 4px;
-  margin-left: 10px; /* Adjust the margin as needed for spacing */
+  //height: 36px; /* Maintain the aspect ratio */
+  //margin-top: 4px;
+  margin-left: 1px; /* Adjust the margin as needed for spacing */
   font-size: 1.5rem; /* Adjust the font size as needed */
-  
-
-  display: grid;
-  align-items: center;
+  margin-right: 1px;
  
       
+}
+
+.center-content{
+  display: flex;
+  //flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+pwa-camera{
+  height: 100%!important;
+}
+.content{
+  height: 100%!important;
+  width: 100%;
 }
