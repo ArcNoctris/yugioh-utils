@@ -1,9 +1,10 @@
-import { Component, NgZone, OnInit,OnDestroy } from '@angular/core';
+import { Component, NgZone, OnInit,OnDestroy, inject  } from '@angular/core';
 import { User } from 'firebase/auth';
 import { Observable, Subscription } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { LoadingPage } from './loading/loading.page';
 import { NavController } from '@ionic/angular';
+import { Analytics } from '@angular/fire/analytics';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,7 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
+  private analytics: Analytics = inject(Analytics);
   public userSub:Subscription
   public appPages = [
     { title: 'Play', url: '/play', icon: 'dice' },
@@ -40,6 +42,7 @@ ionViewDidEnter() {
 
 
   ngOnInit(){
+    
     this.userSub = this.as.user$.subscribe(user => {
       this.ngZone.run(() => {
         this.user = user

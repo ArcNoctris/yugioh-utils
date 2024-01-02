@@ -6,6 +6,7 @@ import { CardDbService } from '../services/card-db.service';
 import { ypdset, ypdcard } from '../models/ygoprodeck.model';
 import { OCR } from '../models/ocr.model';
 
+
 @Component({
   selector: 'app-card-finder',
   templateUrl: './card-finder.page.html',
@@ -21,6 +22,14 @@ export class CardFinderPage implements OnInit {
 
   ngOnInit() {
     this.takePicture()
+    this.card = { "id": "41165831", "name": "Unchained Soul of Sharvara", "type": "Effect Monster", 
+    "desc": "During the Main Phase, if this card is in your hand (Quick Effect): You can target 1 Fiend monster or 1 face-down card you control; destroy it, and if you do, Special Summon this card, but while it is face-up in the Monster Zone, you cannot Special Summon monsters, except Fiend monsters. If this card is sent to the GY: You can Set 1 \"Unchained\" Spell/Trap directly from your Deck. You can only use each effect of \"Unchained Soul of Sharvara\" once per turn.", 
+    "atk": 2000, "def": 1500, "level": 6, "race": "Fiend", "attribute": "FIRE", "archetype": "Unchained", 
+    "card_sets": [ { "id":"","name":"","set_name": "Duelist Nexus", "set_code": "DUNE-EN019", "set_rarity": "Common", "set_rarity_code": "(C)", "set_price": "0" } ],
+     "card_images": [ { "id": "41165831", "image_url": "https://images.ygoprodeck.com/images/cards/41165831.jpg", 
+     "image_url_small": "https://images.ygoprodeck.com/images/cards_small/41165831.jpg", "image_url_cropped": "https://images.ygoprodeck.com/images/cards_cropped/41165831.jpg" } ], 
+     "card_prices": [ { "cardmarket_price": "0.18", "tcgplayer_price": "0.16", "ebay_price": "0.00", "amazon_price": "0.00", "coolstuffinc_price": "0.39" } ] }
+     this.card = undefined;
   }
 
   /**

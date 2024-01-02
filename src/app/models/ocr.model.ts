@@ -9,16 +9,16 @@ export class OCR{
         //Identifier
         public language:string | undefined = undefined,
         public setID:string | undefined = undefined,
-        public id:string | undefined = undefined
+        public id:string | undefined = undefined,
+        public cardName:string | undefined = undefined
 
 
     ){
         //Identifier
         this.language = language,
         this.setID= setID,
-        this.id = id
-
-
+        this.id = id,
+        this.cardName = cardName
     }
 
 }
