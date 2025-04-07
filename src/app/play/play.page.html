@@ -9,11 +9,16 @@
 
 <ion-content [fullscreen]="true">
 
-    <ion-modal [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)">
+    <ion-modal [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)" class="game-modal">
       <ng-template>
         <ion-header>
           <ion-toolbar>
-            <ion-title>{{activePlayer.name}} &nbsp;|&nbsp; {{activePlayer.lp}}</ion-title>
+            <ion-title>
+              <div class="modal-title">
+                <span class="player-name">{{activePlayer.name}}</span>
+                <span class="lp-value">{{activePlayer.lp}}</span>
+              </div>
+            </ion-title>
             <ion-buttons slot="end">
               <ion-button (click)="confirm()" [strong]="true" name="cancel">
                 <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -22,43 +27,60 @@
           </ion-toolbar>
         </ion-header>
 
-        <ion-content class="ion-padding">
+        <ion-content class="ion-padding calculator-content">
 
-    <div class="calc" gdColumns="4" gdRows="5" gdAuto="column" style="height: 100%;" gdGap="10px">
+    <div class="calc" gdColumns="4" gdRows="5" gdAuto="column" style="height: 100%;" gdGap="15px">
 
         <div class="example-full-width" appearance="outline" gdColumn="1/5" gdRow="1/2">
             <div gdColumns="6" class="t1" >
-                <div gdColumn="1/2">{{activePlayer.lp}}</div>
-                <div gdColumn="2/3">{{operator}}</div>
-                <div gdColumn="3/4">{{value}}</div>
-                <div gdColumn="4/5">=</div>
-                <div gdColumn="5/6"> {{updatedValue}} </div>
+                <div gdColumn="1/2" class="lp-display">{{activePlayer.lp}}</div>
+                <div gdColumn="2/3" class="operator-display">{{operator}}</div>
+                <div gdColumn="3/4" class="value-display">{{value}}</div>
+                <div gdColumn="4/5" class="equals-display">=</div>
+                <div gdColumn="5/6" class="result-display">{{updatedValue}}</div>
             </div>
         </div>
-        <button mat-raised-button color="accent" gdColumn="1/2" gdRow="2/3" (click)="resetValue()"> DEL </button>
+        <button mat-raised-button color="accent" gdColumn="1/2" gdRow="2/3" (click)="resetValue()" class="del-button">
+          <ion-icon name="backspace-outline"></ion-icon> DEL
+        </button>
 
+        <button mat-raised-button color="accent" gdColumn="2/3" gdRow="2/3" (click)="undoLastChange()" class="undo-button">
+          <ion-icon name="arrow-undo-outline"></ion-icon> UNDO
+        </button>
 
-        <button mat-raised-button color="primary" gdColumn="1/2" gdRow="3/4" (click)="toValue(1)"> 1</button>
-        <button mat-raised-button color="primary" gdColumn="2/3" gdRow="3/4" (click)="toValue(2)"> 2</button>
-        <button mat-raised-button color="primary" gdColumn="3/4" gdRow="3/4" (click)="toValue(3)"> 3</button>
+        <button mat-raised-button color="accent" gdColumn="3/5" gdRow="2/3" (click)="showHistory()" class="history-button">
+          <ion-icon name="list-outline"></ion-icon> HISTORY
+        </button>
 
-        <button mat-raised-button color="accent" gdColumn="4/5" gdRow="3/4" (click)="asOperator('+')"> + </button>
+        <button mat-raised-button color="primary" gdColumn="1/2" gdRow="3/4" (click)="toValue(1)" class="num-button"> 1</button>
+        <button mat-raised-button color="primary" gdColumn="2/3" gdRow="3/4" (click)="toValue(2)" class="num-button"> 2</button>
+        <button mat-raised-button color="primary" gdColumn="3/4" gdRow="3/4" (click)="toValue(3)" class="num-button"> 3</button>
 
-        <button mat-raised-button color="primary" gdColumn="1/2" gdRow="4/5" (click)="toValue(4)"> 4</button>
-        <button mat-raised-button color="primary" gdColumn="2/3" gdRow="4/5" (click)="toValue(5)"> 5</button>
-        <button mat-raised-button color="primary" gdColumn="3/4" gdRow="4/5" (click)="toValue(6)"> 6</button>
+        <button mat-raised-button color="accent" gdColumn="4/5" gdRow="3/4" (click)="asOperator('+')" class="op-button">
+          <ion-icon name="add-outline"></ion-icon>
+        </button>
 
-        <button mat-raised-button color="accent" gdColumn="4/5" gdRow="4/5" (click)="asOperator('-')"> - </button>
+        <button mat-raised-button color="primary" gdColumn="1/2" gdRow="4/5" (click)="toValue(4)" class="num-button"> 4</button>
+        <button mat-raised-button color="primary" gdColumn="2/3" gdRow="4/5" (click)="toValue(5)" class="num-button"> 5</button>
+        <button mat-raised-button color="primary" gdColumn="3/4" gdRow="4/5" (click)="toValue(6)" class="num-button"> 6</button>
 
-        <button mat-raised-button color="primary" gdColumn="1/2" gdRow="5/6" (click)="toValue(7)"> 7</button>
-        <button mat-raised-button color="primary" gdColumn="2/3" gdRow="5/6" (click)="toValue(8)"> 8</button>
-        <button mat-raised-button color="primary" gdColumn="3/4" gdRow="5/6" (click)="toValue(9)"> 9</button>
+        <button mat-raised-button color="accent" gdColumn="4/5" gdRow="4/5" (click)="asOperator('-')" class="op-button">
+          <ion-icon name="remove-outline"></ion-icon>
+        </button>
 
-        <button mat-raised-button color="accent" gdColumn="4/5" gdRow="5/6" (click)="asOperator('/')"> / </button>
+        <button mat-raised-button color="primary" gdColumn="1/2" gdRow="5/6" (click)="toValue(7)" class="num-button"> 7</button>
+        <button mat-raised-button color="primary" gdColumn="2/3" gdRow="5/6" (click)="toValue(8)" class="num-button"> 8</button>
+        <button mat-raised-button color="primary" gdColumn="3/4" gdRow="5/6" (click)="toValue(9)" class="num-button"> 9</button>
 
-        <button mat-raised-button color="primary" gdColumn="1/2" gdRow="6/7" (click)="toValue(0)"> 0</button>
-        <button mat-raised-button color="primary" gdColumn="2/3" gdRow="6/7" (click)="toValue(0,true)"> 00 </button>
-        <button mat-raised-button color="accent" gdColumn="3/5" gdRow="6/7" (click)="updateValue()"> = </button>
+        <button mat-raised-button color="accent" gdColumn="4/5" gdRow="5/6" (click)="divideByTwo()" class="op-button">
+          <ion-icon name="remove-outline"></ion-icon>/2
+        </button>
+
+        <button mat-raised-button color="primary" gdColumn="1/2" gdRow="6/7" (click)="toValue(0)" class="num-button"> 0</button>
+        <button mat-raised-button color="primary" gdColumn="2/3" gdRow="6/7" (click)="toValue(0,true)" class="num-button"> 00 </button>
+        <button mat-raised-button color="accent" gdColumn="3/5" gdRow="6/7" (click)="updateValue()" class="equals-button">
+          <ion-icon name="checkmark-outline"></ion-icon>
+        </button>
 
 
     </div>
@@ -67,18 +89,48 @@
       </ng-template>
     </ion-modal>
 
+    <!-- History Modal -->
+    <ion-modal [isOpen]="isHistoryModalOpen" (willDismiss)="closeHistoryModal()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>
+              <div class="modal-title">
+                <span>Lifepoint History</span>
+              </div>
+            </ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="closeHistoryModal()" [strong]="true">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <ion-list>
+            <ion-item *ngFor="let entry of lpHistory">
+              <ion-label>
+                <h2>{{entry.playerName}}</h2>
+                <p>{{entry.oldValue}} → {{entry.newValue}} ({{entry.change > 0 ? '+' + entry.change : entry.change}})</p>
+                <p class="history-timestamp">{{entry.timestamp | date:'shortTime'}}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
 
-    <div *ngIf="players.length >0" style="height:100%">
+
+    <div *ngIf="players.length >0" style="height:100%" class="player-board">
         <ion-grid style="height: 100%;" fxLayout="column" fxLayoutAlign="space-between">
 
-            <ion-row style=" height: 100%;" *ngFor="let player of players" class="grid">
-                <ion-col [class]="'img ' " [style.background-image]="'url('+(player.background | async) +')'" style="border-radius: 10px; border-width: 2px; border-style: solid;" (click)="setOpen(true)">
+            <ion-row style="height: 100%;" *ngFor="let player of players" class="grid">
+                <ion-col [class]="'img player-card ' + player.class" [style.background-image]="'url('+(player.background | async) +')'" style="border-radius: 15px; border-width: 3px; border-style: solid;" (click)="calcLP(player)" [id]="'player-' + player.id">
                 <div fxLayout="column" style="width:100%; height:100%">
-                    <div class="header" fxFlex="20">{{player.name}} </div>
+                    <div class="header" fxFlex="20">{{player.name}}</div>
                     <div fxLayout="column" fxFlex="75" fxLayoutAlign="center center" class="lp">
-                        <div [class]="player.class" (click)="calcLP(player)">
+                        <div [class]="player.class + ' lp-counter'">
                             {{player.lp}}
-
                         </div>
                     </div>
                 </div>
@@ -87,14 +139,23 @@
             </ion-row>
         </ion-grid>
     </div>
-    <ion-fab vertical="bottom" horizontal="end" >
-        <ion-fab-button color="light" >
+    
+    <!-- Timer Display -->
+    <div class="timer-display" *ngIf="timerRunning">
+      <div class="timer-value">{{formatTime(timerValue)}}</div>
+    </div>
+
+    <ion-fab vertical="bottom" horizontal="end">
+        <ion-fab-button>
             <ion-icon name="settings"></ion-icon>
         </ion-fab-button>
         <ion-fab-list side="start">
+              <ion-fab-button id="timer" (click)="toggleTimer()">
+                <ion-icon [name]="timerRunning ? 'timer-outline' : 'stopwatch-outline'"></ion-icon>
+              </ion-fab-button>
 
               <ion-fab-button id="count" (click)="presentActionSheet()">
-                <ion-icon name="person-add" ></ion-icon>
+                <ion-icon name="person-add"></ion-icon>
               </ion-fab-button>
 
             <ion-fab-button id="reset-game" (click)="resetGame()">
