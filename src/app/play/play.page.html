@@ -7,7 +7,7 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" (click)="exitOledModeTemporarily()">
 
     <ion-modal [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)" class="game-modal">
       <ng-template>
@@ -120,6 +120,143 @@
       </ng-template>
     </ion-modal>
 
+    <!-- Multiplayer Modal -->
+    <ion-modal [isOpen]="isMultiplayerModalOpen" (willDismiss)="closeMultiplayerModal()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>
+              <div class="modal-title">
+                <span>Multiplayer Duel</span>
+              </div>
+            </ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="closeMultiplayerModal()" [strong]="true">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <div class="multiplayer-options">
+            <ion-button expand="block" color="primary" (click)="hostGame()">
+              <ion-icon name="create-outline" slot="start"></ion-icon>
+              Host a Duel
+            </ion-button>
+            <ion-button expand="block" color="secondary" (click)="joinGame()">
+              <ion-icon name="enter-outline" slot="start"></ion-icon>
+              Join a Duel
+            </ion-button>
+          </div>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
+    <!-- Share Game Modal -->
+    <ion-modal [isOpen]="isShareModalOpen" (willDismiss)="closeShareModal()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>
+              <div class="modal-title">
+                <span>Share Duel</span>
+              </div>
+            </ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="closeShareModal()" [strong]="true">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <div class="share-container">
+            <h2>Share this duel with another player</h2>
+            <div class="share-code">
+              <h3>Game ID: {{gameSessionId}}</h3>
+              <ion-button expand="block" color="primary" (click)="copySessionId()">
+                <ion-icon name="copy-outline" slot="start"></ion-icon>
+                Copy Game ID to Clipboard
+              </ion-button>
+            </div>
+            <div class="duel-info">
+              <p><strong>Host:</strong> {{players[0].name}}</p>
+              <p><strong>Deck:</strong> {{selectedDeck?.name || 'Not specified'}}</p>
+            </div>
+          </div>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
+    <!-- Join Game Modal -->
+    <ion-modal [isOpen]="isJoinModalOpen" (willDismiss)="closeJoinModal()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>
+              <div class="modal-title">
+                <span>Join Duel</span>
+              </div>
+            </ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="closeJoinModal()" [strong]="true">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <div class="join-container">
+            <h2>Enter Game ID to join</h2>
+            <ion-item>
+              <ion-label position="floating">Game ID</ion-label>
+              <ion-input [(ngModel)]="gameIdToJoin"></ion-input>
+            </ion-item>
+            <ion-button expand="block" color="primary" (click)="connectToGame()" [disabled]="!gameIdToJoin">
+              <ion-icon name="log-in-outline" slot="start"></ion-icon>
+              Join Duel
+            </ion-button>
+          </div>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
+    <!-- Deck Selection Modal -->
+    <ion-modal [isOpen]="isDeckModalOpen" (willDismiss)="closeDeckModal()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>
+              <div class="modal-title">
+                <span>Select Your Deck</span>
+              </div>
+            </ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="closeDeckModal()" [strong]="true">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <ion-list>
+            <ion-radio-group [(ngModel)]="selectedDeckId">
+              <ion-item *ngFor="let deck of availableDecks">
+                <ion-label>{{deck.name}}</ion-label>
+                <ion-radio [value]="deck.id"></ion-radio>
+              </ion-item>
+              <ion-item>
+                <ion-label>Not Specified</ion-label>
+                <ion-radio value="none"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+          </ion-list>
+          <ion-button expand="block" color="primary" (click)="confirmDeckSelection()">
+            Confirm Selection
+          </ion-button>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
 
     <div *ngIf="players.length >0" style="height:100%" class="player-board">
         <ion-grid style="height: 100%;" fxLayout="column" fxLayoutAlign="space-between">
@@ -156,6 +293,10 @@
 
               <ion-fab-button id="count" (click)="presentActionSheet()">
                 <ion-icon name="person-add"></ion-icon>
+              </ion-fab-button>
+
+              <ion-fab-button id="oled-mode" (click)="toggleOledMode()">
+                <ion-icon [name]="oledModeEnabled ? 'bulb-outline' : 'contrast-outline'"></ion-icon>
               </ion-fab-button>
 
             <ion-fab-button id="reset-game" (click)="resetGame()">

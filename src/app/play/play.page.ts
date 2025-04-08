@@ -2,7 +2,7 @@ import { Component, OnInit,ViewChild  } from '@angular/core';
 import { User } from '@capacitor-firebase/authentication';
 import { MenuController } from '@ionic/angular';
 import { FirebaseCommunicationService } from '../services/firebase-communication.service';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, ToastController, AlertController } from '@ionic/angular';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 
@@ -29,6 +29,12 @@ interface PlayerOptions {
     timestamp: Date;
   }
 
+  interface Deck {
+    id: string;
+    name: string;
+    description?: string;
+  }
+
 @Component({
   selector: 'app-folder',
   templateUrl: './play.page.html',
@@ -38,6 +44,10 @@ export class PlayPage implements OnInit {
     @ViewChild(IonModal) modal: IonModal;
     isModalOpen = false;
     isHistoryModalOpen = false;
+    isMultiplayerModalOpen = false;
+    isShareModalOpen = false;
+    isJoinModalOpen = false;
+    isDeckModalOpen = false;
     activePlayer: Player | null;
     public players: Player[];
     public playerCount: string;
@@ -53,14 +63,40 @@ export class PlayPage implements OnInit {
     timerRunning: boolean = false;
     timerValue: number = 0; 
     timerInterval: any;
+    
+    // OLED mode properties
+    oledModeEnabled: boolean = false;
+    oledModeActive: boolean = false;
+    oledModeTimeout: any;
+    oledModeDelay: number = 10000; // 10 seconds before OLED mode activates
+    
+    // Multiplayer properties
+    gameSessionId: string = '';
+    gameIdToJoin: string = '';
+    isHost: boolean = false;
+    
+    // Deck selection
+    availableDecks: Deck[] = [
+      { id: 'blue-eyes', name: 'Blue-Eyes White Dragon' },
+      { id: 'dark-magician', name: 'Dark Magician' },
+      { id: 'cyber-dragon', name: 'Cyber Dragon' },
+      { id: 'heroes', name: 'Elemental HERO' },
+      { id: 'blackwings', name: 'Blackwing' }
+    ];
+    selectedDeckId: string = 'none';
+    selectedDeck: Deck | null = null;
+    
+    // User info
+    currentUser: User | null = null;
   
     public backgroundList: string[]
   
     constructor(
       public fcs: FirebaseCommunicationService,
       public menu: MenuController,
-      public asc: ActionSheetController
-  
+      public asc: ActionSheetController,
+      private toastCtrl: ToastController,
+      private alertCtrl: AlertController
     ) {
       this.players = []
   
@@ -77,11 +113,14 @@ export class PlayPage implements OnInit {
             }
             this.resetGame()
           }
-  
-  
         }
       )
-  
+      
+      // Set a default player name
+      this.currentUser = {
+        displayName: 'Player1',
+        uid: 'local-player'
+      } as User;
   
       this.playerCount = this.playerOptions[0].value
       this.gameStarted = false
@@ -267,31 +306,32 @@ export class PlayPage implements OnInit {
     
     resetGame() {
       this.players = []
-      this.activePlayer = null
-      let playerId = 1;
-      this.players.push({ 
-        name: "Player1", 
-        lp: 8000, 
-        cols: "1/7", 
-        rows: "1/1", 
-        class: "normal", 
-        background: this.getRandomBackground("normal"),
-        id: playerId++
-      })
-      this.activePlayer = this.players[0]
-      this.players.push({ 
-        name: "Player2", 
-        lp: 8000, 
-        cols: "1/7", 
-        rows: "2/2", 
-        class: "normal", 
-        background: this.getRandomBackground("normal"),
-        id: playerId++
-      })
+      let playerId = 0;
+      
+      // Set first player name to current user's name if available
+      const firstPlayerName = this.currentUser ? this.currentUser.displayName || 'Player1' : 'Player1';
       
       switch (this.playerCount) {
         case '2': {
-          this.rowHeight = "2:1"
+          this.rowHeight = "1:1"
+          this.players.push({ 
+            name: firstPlayerName, 
+            lp: 8000, 
+            cols: "1/1", 
+            rows: "1/1", 
+            class: "normal", 
+            background: this.getRandomBackground("normal"),
+            id: playerId++
+          })
+          this.players.push({ 
+            name: "Visitor", 
+            lp: 8000, 
+            cols: "1/1", 
+            rows: "2/2", 
+            class: "normal", 
+            background: this.getRandomBackground("normal"),
+            id: playerId++
+          })
           break;
         }
         case '3-1': {
@@ -374,129 +414,254 @@ export class PlayPage implements OnInit {
       this.stopTimer();
       this.timerValue = 0;
       
+      // Reset multiplayer session
+      this.gameSessionId = '';
+      this.isHost = false;
+      this.selectedDeckId = 'none';
+      this.selectedDeck = null;
+      
       console.log("this")
       console.log(this.players[0].background)
     }
 
+    // Multiplayer functions
+    openMultiplayerModal() {
+      this.isMultiplayerModalOpen = true;
+    }
+    
+    closeMultiplayerModal() {
+      this.isMultiplayerModalOpen = false;
+    }
+    
+    hostGame() {
+      this.closeMultiplayerModal();
+      this.isHost = true;
+      
+      // Generate a random session ID
+      this.gameSessionId = Math.random().toString(36).substring(2, 10).toUpperCase();
+      
+      // Open deck selection modal
+      this.isDeckModalOpen = true;
+    }
+    
+    joinGame() {
+      this.closeMultiplayerModal();
+      this.isHost = false;
+      this.isJoinModalOpen = true;
+    }
+    
+    closeJoinModal() {
+      this.isJoinModalOpen = false;
+    }
+    
+    async connectToGame() {
+      if (!this.gameIdToJoin) {
+        return;
+      }
+      
+      this.gameSessionId = this.gameIdToJoin;
+      this.closeJoinModal();
+      
+      // In a real implementation, this would connect to the host's game
+      // For now, we'll just simulate by opening the deck selection
+      this.isDeckModalOpen = true;
+      
+      const toast = await this.toastCtrl.create({
+        message: 'Connected to game ' + this.gameSessionId,
+        duration: 2000
+      });
+      toast.present();
+    }
+    
+    openShareModal() {
+      this.isShareModalOpen = true;
+    }
+    
+    closeShareModal() {
+      this.isShareModalOpen = false;
+    }
+    
+    async copySessionId() {
+      // Create a temporary input element
+      const selBox = document.createElement('textarea');
+      selBox.style.position = 'fixed';
+      selBox.style.left = '0';
+      selBox.style.top = '0';
+      selBox.style.opacity = '0';
+      selBox.value = this.gameSessionId;
+      document.body.appendChild(selBox);
+      selBox.focus();
+      selBox.select();
+      document.execCommand('copy');
+      document.body.removeChild(selBox);
+      
+      const toast = await this.toastCtrl.create({
+        message: 'Game ID copied to clipboard',
+        duration: 2000
+      });
+      toast.present();
+    }
+    
+    // Deck selection
+    openDeckModal() {
+      this.isDeckModalOpen = true;
+    }
+    
+    closeDeckModal() {
+      this.isDeckModalOpen = false;
+    }
+    
+    confirmDeckSelection() {
+      if (this.selectedDeckId !== 'none') {
+        this.selectedDeck = this.availableDecks.find(deck => deck.id === this.selectedDeckId) || null;
+      } else {
+        this.selectedDeck = null;
+      }
+      
+      this.closeDeckModal();
+      
+      // If hosting, show the share modal
+      if (this.isHost) {
+        this.openShareModal();
+      }
+    }
+    
+    presentActionSheet() {
+      // Open multiplayer modal instead of player count action sheet
+      this.openMultiplayerModal();
+    }
+    
+    message = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
+    name: string;
+    
+    cancel() {
+      this.setOpen(false)
+    }
+    
+    confirm() {
+      this.setOpen(false)
+    }
+    
+    onWillDismiss(event: Event) {
+      this.setOpen(false)
+    }
 
-    async presentActionSheet() {
-        const actionSheet = await this.asc.create({
-          header: 'Player Amount',
-          cssClass: 'player-count',
-          buttons: [{
-            text: '2 Player',
-            icon: 'reorder-two',
-            data:  '2',
-            handler: () => {
-                this.playerCount = '2'
-                this.resetGame()
-            }
-          }, {
-            text: '3 Player',
-            icon: 'reorder-three',
-            data:  '3-2',
-            handler: () => {
-                this.playerCount = '3-2'
-                this.resetGame()
-            }
-          },{
-            text: '4 Player (Teams)',
-            icon: 'reorder-four',
-            data:  '4-2',
-            handler: () => {
-                this.playerCount = '4-2'
-                this.resetGame()
-            }
-          },{
-            text: '4 Player (FFA)',
-            icon: 'reorder-four',
-            data:  '4-2',
-            handler: () => {
-                this.playerCount = '4-1'
-                this.resetGame()
-            }
-          }, {
-            text: 'Cancel',
-            icon: 'close',
-            role: 'cancel',
-            handler: () => {
-              console.log('Cancel clicked');
-            }
-          }]
-        });
-        await actionSheet.present();
+    setOpen(isOpen: boolean) {
+      this.isModalOpen = isOpen;
+    }
     
-      }
-      message = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
-      name: string;
+    calcLP(player: Player) {
+      this.isModalOpen = true;
+      this.activePlayer = player;
+    }
     
-      cancel() {
-        this.setOpen(false)
-      }
+    showHistory() {
+      this.isHistoryModalOpen = true;
+    }
     
-      confirm() {
-        this.setOpen(false)
-      }
+    closeHistoryModal() {
+      this.isHistoryModalOpen = false;
+    }
     
-      onWillDismiss(event: Event) {
-        this.setOpen(false)
-      }
-
-      setOpen(isOpen: boolean) {
-        this.isModalOpen = isOpen;
-      }
-      
-      calcLP(player: Player) {
-        this.isModalOpen = true;
-        this.activePlayer = player;
-      }
-      
-      showHistory() {
-        this.isHistoryModalOpen = true;
-      }
-      
-      closeHistoryModal() {
-        this.isHistoryModalOpen = false;
-      }
-      
-      undoLastChange() {
-        if (this.lpHistory.length > 0) {
-          const lastEntry = this.lpHistory[0];
+    undoLastChange() {
+      if (this.lpHistory.length > 0) {
+        const lastEntry = this.lpHistory[0];
+        
+        const player = this.players.find(p => p.id === lastEntry.playerId);
+        if (player) {
+          player.lp = lastEntry.oldValue;
           
-          const player = this.players.find(p => p.id === lastEntry.playerId);
-          if (player) {
-            player.lp = lastEntry.oldValue;
-            
-            this.lpHistory.shift();
-          }
+          this.lpHistory.shift();
         }
       }
+    }
+    
+    toggleTimer() {
+      if (this.timerRunning) {
+        this.stopTimer();
+      } else {
+        this.startTimer();
+      }
+    }
+    
+    startTimer() {
+      this.timerRunning = true;
+      this.timerInterval = setInterval(() => {
+        this.timerValue++;
+        
+        // If OLED mode is enabled and not yet active, start the timeout
+        if (this.oledModeEnabled && !this.oledModeActive) {
+          this.startOledModeTimeout();
+        }
+      }, 1000);
+    }
+    
+    stopTimer() {
+      this.timerRunning = false;
+      if (this.timerInterval) {
+        clearInterval(this.timerInterval);
+      }
       
-      toggleTimer() {
+      // If OLED mode is active, deactivate it when timer stops
+      if (this.oledModeActive) {
+        this.deactivateOledMode();
+      }
+    }
+    
+    // OLED mode functions
+    toggleOledMode() {
+      this.oledModeEnabled = !this.oledModeEnabled;
+      
+      if (this.oledModeEnabled) {
+        // If timer is already running, start the timeout
         if (this.timerRunning) {
-          this.stopTimer();
-        } else {
-          this.startTimer();
+          this.startOledModeTimeout();
+        }
+      } else {
+        // If OLED mode is being disabled, deactivate it if active
+        if (this.oledModeActive) {
+          this.deactivateOledMode();
         }
       }
-      
-      startTimer() {
-        this.timerRunning = true;
-        this.timerInterval = setInterval(() => {
-          this.timerValue++;
-        }, 1000);
+    }
+    
+    startOledModeTimeout() {
+      // Clear any existing timeout
+      if (this.oledModeTimeout) {
+        clearTimeout(this.oledModeTimeout);
       }
       
-      stopTimer() {
-        this.timerRunning = false;
-        if (this.timerInterval) {
-          clearInterval(this.timerInterval);
-        }
-      }
+      // Set a new timeout
+      this.oledModeTimeout = setTimeout(() => {
+        this.activateOledMode();
+      }, this.oledModeDelay);
+    }
+    
+    activateOledMode() {
+      this.oledModeActive = true;
+      document.body.classList.add('oled-mode');
+    }
+    
+    deactivateOledMode() {
+      this.oledModeActive = false;
+      document.body.classList.remove('oled-mode');
       
-      formatTime(seconds: number): string {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+      // If OLED mode is still enabled and timer is running, restart the timeout
+      if (this.oledModeEnabled && this.timerRunning) {
+        this.startOledModeTimeout();
       }
+    }
+    
+    // Touch anywhere to exit OLED mode temporarily
+    exitOledModeTemporarily() {
+      if (this.oledModeActive) {
+        this.deactivateOledMode();
+      }
+    }
+    
+    formatTime(seconds: number): string {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+      return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
 }
